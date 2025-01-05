@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <About />
       <ProjectList />
-      <Leetcode />
+      {/* <Leetcode /> */}
       <Contact />
     </main>
   );
