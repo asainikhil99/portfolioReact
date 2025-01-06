@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import {
   LineChart,
@@ -10,24 +9,52 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const LeetcodeStats = () => {
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedLevel, setSelectedLevel] = useState("all");
+interface LeetCodeStats {
+  totalSolved: number;
+  totalQuestions: number;
+  easySolved: number;
+  totalEasy: number;
+  mediumSolved: number;
+  totalMedium: number;
+  hardSolved: number;
+  totalHard: number;
+  ranking: number;
+  acceptanceRate: number;
+  contributionPoints: number;
+  reputation: number;
+}
+
+interface Category {
+  id: string;
+  title: string;
+  solved: number;
+  total: number;
+}
+
+interface ChartData {
+  name: string;
+  solved: number;
+  total: number;
+}
+
+const LeetcodeStats: React.FC = () => {
+  const [stats, setStats] = useState<LeetCodeStats | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<string>("all");
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const username = "saiNikhilAvula"; // Replace with your username
+        const username = "saiNikhilAvula";
         const response = await fetch(
           `https://leetcode-stats-api.herokuapp.com/${username}`
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
+        const data: LeetCodeStats = await response.json();
         setStats(data);
       } catch (error) {
         console.error("Error:", error);
@@ -44,7 +71,7 @@ const LeetcodeStats = () => {
   if (error) return <div>Error: {error}</div>;
   if (!stats) return null;
 
-  const categories = [
+  const categories: Category[] = [
     {
       id: "all",
       title: "All",
@@ -71,13 +98,15 @@ const LeetcodeStats = () => {
     },
   ];
 
-  const selectedCategory = categories.find((c) => c.id === selectedLevel);
+  const selectedCategory =
+    categories.find((c) => c.id === selectedLevel) || categories[0];
+
   const completionRate = (
     (selectedCategory.solved / selectedCategory.total) *
     100
   ).toFixed(1);
 
-  const chartData = categories.map((cat) => ({
+  const chartData: ChartData[] = categories.map((cat) => ({
     name: cat.title,
     solved: cat.solved,
     total: cat.total,
@@ -87,7 +116,6 @@ const LeetcodeStats = () => {
     <div className="p-4">
       <h1 className="text-xl mb-4">LeetCode Stats</h1>
 
-      {/* Category Selection */}
       <div className="flex gap-4 mb-4">
         {categories.map((cat) => (
           <button
@@ -102,7 +130,6 @@ const LeetcodeStats = () => {
         ))}
       </div>
 
-      {/* Stats Display */}
       <div className="border p-4 mb-4">
         <h2 className="text-lg mb-2">{selectedCategory.title} Progress</h2>
         <div className="mb-2">
@@ -117,7 +144,6 @@ const LeetcodeStats = () => {
         </div>
       </div>
 
-      {/* Chart */}
       <div className="border p-4 mb-4 h-64">
         <h2 className="text-lg mb-2">Problem Distribution</h2>
         <ResponsiveContainer width="100%" height="100%">
@@ -130,7 +156,6 @@ const LeetcodeStats = () => {
         </ResponsiveContainer>
       </div>
 
-      {/* Additional Stats */}
       <div className="grid grid-cols-2 gap-4">
         <div className="border p-4">
           <div>Ranking: #{stats.ranking?.toLocaleString()}</div>
