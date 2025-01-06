@@ -72,7 +72,7 @@ const Hero = () => {
               View Projects
             </a>
             <a
-              href="#Contact"
+              href="#contact"
               className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-300"
             >
               Contact Me
