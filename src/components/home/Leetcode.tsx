@@ -14,7 +14,6 @@ import {
   Legend,
 } from "recharts";
 import {
-  Search,
   Trophy,
   Award,
   Star,
@@ -23,6 +22,7 @@ import {
   Loader2,
 } from "lucide-react";
 
+// Keep all your existing interfaces...
 interface LeetCodeStats {
   totalSolved: number;
   totalQuestions: number;
@@ -46,12 +46,7 @@ interface Category {
   color: string;
 }
 
-interface ChartData {
-  name: string;
-  solved: number;
-  total: number;
-}
-
+// Keep your existing components (LoadingSpinner, ErrorDisplay, StatCard, CategoryCard)...
 const LoadingSpinner = () => (
   <div className="min-h-[400px] flex items-center justify-center">
     <div className="flex flex-col items-center gap-4">
@@ -133,7 +128,6 @@ const LeetcodeStats = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
-  const [username, setUsername] = useState<string>("saiNikhilAvula");
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -141,13 +135,11 @@ const LeetcodeStats = () => {
         setLoading(true);
         setError(null);
         const response = await fetch(
-          `https://leetcode-stats-api.herokuapp.com/${username}`
+          "https://leetcode-stats-api.herokuapp.com/saiNikhilAvula"
         );
 
         if (!response.ok) {
-          throw new Error(
-            `Unable to fetch data for ${username}. Please check the username and try again.`
-          );
+          throw new Error("Unable to fetch LeetCode statistics");
         }
 
         const data: LeetCodeStats = await response.json();
@@ -160,8 +152,8 @@ const LeetcodeStats = () => {
       }
     };
 
-    if (username) fetchStats();
-  }, [username]);
+    fetchStats();
+  }, []);
 
   const categories: Category[] = stats
     ? [
@@ -204,35 +196,17 @@ const LeetcodeStats = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <ErrorDisplay message={error} />;
-  if (!stats)
-    return <ErrorDisplay message="No data available. Please try again." />;
+  if (!stats) return <ErrorDisplay message="No data available" />;
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">
-          LeetCode Statistics
+          My LeetCode Progress
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Track your LeetCode progress and achievements
+          Track my problem-solving journey on LeetCode
         </p>
-      </div>
-
-      {/* Username Search */}
-      <div className="mb-8">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Enter LeetCode Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value.trim())}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 
-                     rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                     dark:bg-gray-800 dark:text-white transition-colors duration-200"
-            aria-label="LeetCode Username"
-          />
-        </div>
       </div>
 
       {/* Stats Overview */}
