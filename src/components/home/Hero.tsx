@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 const Hero = () => {
-  const router = useRouter();
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
@@ -13,6 +11,13 @@ const Hero = () => {
   const toggleTheme = () => {
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -53,10 +58,8 @@ const Hero = () => {
           </svg>
         )}
       </button>
-
       {/* Grid Overlay */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-
       {/* Main Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -69,15 +72,13 @@ const Hero = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() =>
-                router.push("/src/components/home/ProjectList.tsx")
-              }
+              onClick={() => scrollToSection("projects")}
               className="px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
             >
               View Projects
             </button>
             <button
-              onClick={() => router.push("/contact")}
+              onClick={() => scrollToSection("contact")}
               className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-300"
             >
               Contact Me
