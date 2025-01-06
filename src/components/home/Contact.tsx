@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import {
   Mail,
@@ -7,7 +9,6 @@ import {
   Github,
   Linkedin,
 } from "lucide-react";
-import { LucideIcon } from "lucide-react";
 
 interface FormData {
   name: string;
@@ -16,12 +17,12 @@ interface FormData {
 }
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: LucideIcon;
+  icon?: React.ElementType;
 }
 
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  icon?: LucideIcon;
+  icon?: React.ElementType;
 }
 
 interface AlertProps {
@@ -29,7 +30,7 @@ interface AlertProps {
   variant?: "error" | "success" | "default";
 }
 
-const Input: React.FC<InputProps> = ({ icon: Icon, ...props }) => (
+const Input = ({ icon: Icon, ...props }: InputProps) => (
   <div className="relative">
     {Icon && <Icon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />}
     <input
@@ -44,7 +45,7 @@ const Input: React.FC<InputProps> = ({ icon: Icon, ...props }) => (
   </div>
 );
 
-const Textarea: React.FC<TextareaProps> = ({ icon: Icon, ...props }) => (
+const Textarea = ({ icon: Icon, ...props }: TextareaProps) => (
   <div className="relative">
     {Icon && <Icon className="absolute left-3 top-3 h-5 w-5 text-gray-400" />}
     <textarea
@@ -59,7 +60,7 @@ const Textarea: React.FC<TextareaProps> = ({ icon: Icon, ...props }) => (
   </div>
 );
 
-const Alert: React.FC<AlertProps> = ({ children, variant = "default" }) => {
+const Alert = ({ children, variant = "default" }: AlertProps) => {
   const variantStyles = {
     error: "bg-red-50 text-red-900 dark:bg-red-900/10 dark:text-red-200",
     success:
@@ -72,7 +73,7 @@ const Alert: React.FC<AlertProps> = ({ children, variant = "default" }) => {
   );
 };
 
-const Contact: React.FC = () => {
+const Contact = () => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
