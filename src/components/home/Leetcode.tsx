@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import {
   LineChart,
@@ -50,7 +52,7 @@ interface ChartData {
   total: number;
 }
 
-const LoadingSpinner: React.FC = () => (
+const LoadingSpinner = () => (
   <div className="min-h-[400px] flex items-center justify-center">
     <div className="flex flex-col items-center gap-4">
       <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
@@ -59,7 +61,7 @@ const LoadingSpinner: React.FC = () => (
   </div>
 );
 
-const ErrorDisplay: React.FC<{ message: string }> = ({ message }) => (
+const ErrorDisplay = ({ message }: { message: string }) => (
   <div className="min-h-[400px] flex items-center justify-center">
     <div className="flex flex-col items-center gap-4 text-red-500">
       <AlertCircle className="h-8 w-8" />
@@ -68,13 +70,70 @@ const ErrorDisplay: React.FC<{ message: string }> = ({ message }) => (
   </div>
 );
 
-const LeetcodeStats: React.FC = () => {
+const StatCard = ({
+  icon: Icon,
+  label,
+  value,
+  iconColor,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: string | number;
+  iconColor: string;
+}) => (
+  <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
+    <div className="flex items-center gap-2">
+      <Icon className={`h-5 w-5 ${iconColor}`} />
+      <span className="text-gray-600 dark:text-gray-400">{label}</span>
+    </div>
+    <div className="mt-2 text-2xl font-bold">{value}</div>
+  </div>
+);
+
+const CategoryCard = ({
+  category,
+  isSelected,
+  onClick,
+}: {
+  category: Category;
+  isSelected: boolean;
+  onClick: () => void;
+}) => (
+  <button
+    onClick={onClick}
+    className={`p-4 rounded-lg border transition-all duration-200 ${
+      isSelected
+        ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+        : "border-gray-200 dark:border-gray-700 hover:border-blue-400"
+    }`}
+  >
+    <div className="text-sm text-gray-600 dark:text-gray-400">
+      {category.title}
+    </div>
+    <div className="mt-2 text-2xl font-bold" style={{ color: category.color }}>
+      {category.solved}
+      <span className="text-base font-normal text-gray-500 dark:text-gray-400">
+        /{category.total}
+      </span>
+    </div>
+    <div className="mt-2 w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+      <div
+        className="h-full rounded-full transition-all duration-500"
+        style={{
+          width: `${(category.solved / category.total) * 100}%`,
+          backgroundColor: category.color,
+        }}
+      />
+    </div>
+  </button>
+);
+
+const LeetcodeStats = () => {
   const [stats, setStats] = useState<LeetCodeStats | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string>("all");
   const [username, setUsername] = useState<string>("saiNikhilAvula");
-  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -98,7 +157,6 @@ const LeetcodeStats: React.FC = () => {
         setStats(null);
       } finally {
         setLoading(false);
-        setIsSearching(false);
       }
     };
 
@@ -138,18 +196,7 @@ const LeetcodeStats: React.FC = () => {
       ]
     : [];
 
-  const selectedCategory =
-    categories.find((c) => c.id === selectedLevel) || categories[0];
-  const completionRate = selectedCategory
-    ? ((selectedCategory.solved / selectedCategory.total) * 100).toFixed(1)
-    : "0";
-
-  const handleUsernameSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSearching(true);
-  };
-
-  const chartData: ChartData[] = categories.map((cat) => ({
+  const chartData = categories.map((cat) => ({
     name: cat.title,
     solved: cat.solved,
     total: cat.total,
@@ -172,7 +219,7 @@ const LeetcodeStats: React.FC = () => {
       </div>
 
       {/* Username Search */}
-      <form onSubmit={handleUsernameSubmit} className="mb-8">
+      <div className="mb-8">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input
@@ -186,42 +233,17 @@ const LeetcodeStats: React.FC = () => {
             aria-label="LeetCode Username"
           />
         </div>
-      </form>
+      </div>
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedLevel(cat.id)}
-            className={`p-4 rounded-lg border transition-all duration-200 ${
-              selectedLevel === cat.id
-                ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                : "border-gray-200 dark:border-gray-700 hover:border-blue-400"
-            }`}
-          >
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {cat.title}
-            </div>
-            <div
-              className="mt-2 text-2xl font-bold"
-              style={{ color: cat.color }}
-            >
-              {cat.solved}
-              <span className="text-base font-normal text-gray-500 dark:text-gray-400">
-                /{cat.total}
-              </span>
-            </div>
-            <div className="mt-2 w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-500"
-                style={{
-                  width: `${(cat.solved / cat.total) * 100}%`,
-                  backgroundColor: cat.color,
-                }}
-              />
-            </div>
-          </button>
+        {categories.map((category) => (
+          <CategoryCard
+            key={category.id}
+            category={category}
+            isSelected={selectedLevel === category.id}
+            onClick={() => setSelectedLevel(category.id)}
+          />
         ))}
       </div>
 
@@ -270,47 +292,30 @@ const LeetcodeStats: React.FC = () => {
 
       {/* Additional Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-500" />
-            <span className="text-gray-600 dark:text-gray-400">Ranking</span>
-          </div>
-          <div className="mt-2 text-2xl font-bold">
-            #{stats.ranking?.toLocaleString()}
-          </div>
-        </div>
-
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Activity className="h-5 w-5 text-green-500" />
-            <span className="text-gray-600 dark:text-gray-400">
-              Acceptance Rate
-            </span>
-          </div>
-          <div className="mt-2 text-2xl font-bold">
-            {stats.acceptanceRate?.toFixed(1)}%
-          </div>
-        </div>
-
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Star className="h-5 w-5 text-purple-500" />
-            <span className="text-gray-600 dark:text-gray-400">
-              Contribution Points
-            </span>
-          </div>
-          <div className="mt-2 text-2xl font-bold">
-            {stats.contributionPoints}
-          </div>
-        </div>
-
-        <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-blue-500" />
-            <span className="text-gray-600 dark:text-gray-400">Reputation</span>
-          </div>
-          <div className="mt-2 text-2xl font-bold">{stats.reputation}</div>
-        </div>
+        <StatCard
+          icon={Trophy}
+          label="Ranking"
+          value={`#${stats.ranking?.toLocaleString()}`}
+          iconColor="text-yellow-500"
+        />
+        <StatCard
+          icon={Activity}
+          label="Acceptance Rate"
+          value={`${stats.acceptanceRate?.toFixed(1)}%`}
+          iconColor="text-green-500"
+        />
+        <StatCard
+          icon={Star}
+          label="Contribution Points"
+          value={stats.contributionPoints}
+          iconColor="text-purple-500"
+        />
+        <StatCard
+          icon={Award}
+          label="Reputation"
+          value={stats.reputation}
+          iconColor="text-blue-500"
+        />
       </div>
     </div>
   );
