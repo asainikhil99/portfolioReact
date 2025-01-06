@@ -1,11 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
-  const [isDark, setIsDark] = useState(true); // Set default to true
+  const router = useRouter();
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Set dark mode class on initial load
     document.documentElement.classList.add("dark");
   }, []);
 
@@ -52,8 +53,10 @@ const Hero = () => {
           </svg>
         )}
       </button>
+
       {/* Grid Overlay */}
       <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+
       {/* Main Content */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -65,18 +68,18 @@ const Hero = () => {
             complex problems
           </p>
           <div className="flex gap-4 justify-center">
-            <a
-              href="#projects"
+            <button
+              onClick={() => router.push("/projects")}
               className="px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
             >
               View Projects
-            </a>
-            <a
-              href="#contact"
+            </button>
+            <button
+              onClick={() => router.push("/contact")}
               className="px-8 py-3 bg-black dark:bg-white text-white dark:text-black rounded-lg font-medium hover:bg-gray-900 dark:hover:bg-gray-100 transition-all duration-300"
             >
               Contact Me
-            </a>
+            </button>
           </div>
         </div>
       </div>
