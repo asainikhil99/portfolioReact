@@ -44,7 +44,7 @@ const projects: Project[] = [
     title: "Portfolio Website",
     description: "Modern portfolio with dark mode and animations",
     longDescription:
-      "A responsive personal portfolio website built with Next.js and TailwindCSS, featuring dark mode, smooth animations, and dynamic content loading.",
+      "A responsive personal portfolio website built with Next.js and TailwindCSS, featuring dark mode, smooth animations, and dynamic content loading. Hosted on GitHub Pages.",
     image: "/portfolioReact/images/Projects/Portfolio.png",
     tags: ["Next.js", "React", "TailwindCSS", "TypeScript"],
     github: "https://github.com/asainikhil99/portfolioReact",
