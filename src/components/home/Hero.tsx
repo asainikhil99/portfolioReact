@@ -69,7 +69,9 @@ const Hero = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <button
-              onClick={() => router.push("/projects")}
+              onClick={() =>
+                router.push("/src/components/home/ProjectList.tsx")
+              }
               className="px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300"
             >
               View Projects
