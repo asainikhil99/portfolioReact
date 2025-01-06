@@ -82,7 +82,7 @@ const Contact = () => {
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center tracking-tighter transition-colors duration-300">
-            Let's Connect
+            Let&apos;s Connect
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
