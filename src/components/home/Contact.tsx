@@ -132,7 +132,7 @@ const Contact = () => {
           </span>
         </a>
         <a
-          href="https://www.linkedin.com/in/sainikhil-avula-3b5a77328/"
+          href="https://www.linkedin.com/in/sai-nikhil-avula-3b5a77328/"
           target="_blank"
           rel="noopener noreferrer"
           className="group flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
