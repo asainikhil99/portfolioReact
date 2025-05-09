@@ -38,10 +38,18 @@ jobs:
       - name: Verify output directory
         run: ls -R ./out
 
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
           path: ./out
+
+      # Add this to satisfy any implicit upload-artifact dependency
+      - name: Upload build artifacts (backup)
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-backup
+          path: ./out
+          if-no-files-found: error
 
   deploy:
     environment:
@@ -53,4 +61,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
-
