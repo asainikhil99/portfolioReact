@@ -135,7 +135,7 @@ const LeetcodeStats = () => {
         setLoading(true);
         setError(null);
         const response = await fetch(
-          "https://leetcode-stats-api.herokuapp.com/saiNikhilAvula"
+          "https://alfa-leetcode-api.onrender.com/saiNikhilAvula"
         );
 
         if (!response.ok) {
